@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script defer src="script.js"></script>
+    <title>Document</title>
+
+    <style>
+        .second {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* max-width: ; */
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin: 40px;
+        }
+
+        .container h4,
+        h5 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .view {
+            position: absolute;
+            opacity: 0;
+        }
+        .display{
+            height: 300px;
+            width: 600px;
+            background-color: aquamarine;
+            font-size: 22px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; box-sizing: border-box; ">
+    <div class="main" >
+        <button class="prev-user">Prev User</button>
+        <div class="second">
+                <a href="#" class="link">
+                    <div class="view "></div>
+                    <div class="container">
+                        <img src="" class="image" style="height: 100px; width: 100px; z-index: -10; position: relative;"></img>
+                        <h4 class="nameTag"></h4>
+                        <h5 class="emailTag"></h5>
+                    </div>
+                </a>
+        </div>
+        <button class="next-user">Next User</button>
+    </div>
+    <div class="display"></div>
+
+</body>
+
+</html>
