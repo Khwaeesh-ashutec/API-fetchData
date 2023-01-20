@@ -3,16 +3,25 @@ const prevBtn = document.querySelector('.prev-user')
 const nextBtn = document.querySelector('.next-user')
 const display = document.querySelector('.display')
 
-const API_LINK = 'https://reqres.in/api/users?page='
+const API_LINK_PAGE = 'https://reqres.in/api/users?page=';
+const API_LINK_USER = 'https://reqres.in/api/users/'
 
 let n = 1;
 let user, clickMe;
+let isPage = false;
 
-const AJAX = async function () {
-    const res = await fetch(`${API_LINK}${n}`);
-    const data = await res.json()
-    const userData = data.data;
-    return userData;
+const myFunAJAX = async function (x) {
+    const pageInfoII = await fetch(`${API_LINK_PAGE} ${x}`);
+    const userInfoII = await fetch(`${API_LINK_USER}${x}`);
+    const resultsy = await Promise.allSettled([pageInfoII.json(), userInfoII.json()])
+
+    const [newValPage, newUserVal] = [resultsy[0].value.data, resultsy[1].value.data];
+
+    if (isPage === true) {
+        return newValPage;
+    } else {
+        return newUserVal;
+    }
 }
 
 var stringToHTML = function (str) {
@@ -22,7 +31,8 @@ var stringToHTML = function (str) {
 };
 
 const markUpBuild = async function () {
-    const userData = await AJAX()
+    isPage = true;
+    const userData = await myFunAJAX(n)
 
     second.innerHTML = '';
     const markUpFun = function (e) {
@@ -39,28 +49,20 @@ const markUpBuild = async function () {
     }
 }
 
-const getUserInfo = () => setTimeout(() => {
+const getUserInfo = () => setTimeout(async () => {
     clickMe = second.childNodes;
-
-    const getData = async function () {
-        const data = await AJAX();
-        return data;
-    }
-
     clickMe.forEach(e => {
         e.addEventListener('click', async function (e) {
-            getData()
+
             const p = e.target.closest('.container');
             const id = p.dataset.id;
-            console.log(p.dataset.id)
+            const getData = await myFunAJAX(id)
             const singleUser = async function () {
-                const res = await fetch(`https://reqres.in/api/users/${id}`);
+                const res = await fetch(`${API_LINK_USER}${id}`);
                 const data = await res.json();
-                console.log(data.data);
                 const userData = data.data;
                 return userData;
             }
-            // `${userData.id / n}, ${userData.first_name}, ${userData.email}`
             const getDatabyId = await singleUser();
             const showMarkup = function () {
                 display.innerHTML = '';
@@ -75,7 +77,7 @@ const getUserInfo = () => setTimeout(() => {
             display.insertAdjacentHTML('afterbegin', showMarkup())
         })
     })
-}, 600);
+}, 300);
 
 const pageInfo = async function () {
     markUpBuild();
@@ -98,3 +100,4 @@ nextBtn.addEventListener('click', async function () {
     display.innerHTML = '';
     pageInfo();
 })
+
